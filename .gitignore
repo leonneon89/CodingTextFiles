@@ -1,0 +1,13 @@
+*.o
+*.pro.*
+ui_*
+Makefile*
+moc*
+ui_*
+debug/*.o
+debug/moc*
+debug/ui_*
+release/*.o
+release/moc*
+release/ui_*
+
