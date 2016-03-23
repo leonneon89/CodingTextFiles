@@ -9,6 +9,22 @@ class EncodingFile : public QObject
 {
     Q_OBJECT
 
+    enum Languages
+    {
+        RUSSIAN,
+        ENGLISH,
+        KOREAN,
+        BELARUS
+    };
+
+    enum Codings
+    {
+        UTF_8,
+        WINDOWS_1251,
+        ASCII,
+        KOI8_R
+    };
+
 public:
     explicit EncodingFile(QObject *parent = 0);
     ~EncodingFile();
@@ -17,7 +33,10 @@ public:
     void processFile();
 
 private slots:
-    QString getEncodingType();
+    QString getLanguageName(Languages language);
+    QString getCodeFileName(Codings code);
+    QString getEncodingType(Languages language);
+    void encodeFile(QString sourceCodeName);
 
 private:
     QString fileName_;

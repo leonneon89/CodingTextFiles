@@ -24,112 +24,96 @@ QString EncodingFile::getFileName() {
 
 void EncodingFile::processFile()
 {
-    QFile file(fileName_);
-    if (!file.open(QIODevice::ReadWrite)) {
-        cout << "Error open source file:" << fileName_.toStdString().c_str() << endl;
-        return;
+    QString encodeTypeName = getEncodingType(RUSSIAN);
+
+    if(encodeTypeName != getCodeFileName(UTF_8) && encodeTypeName != getCodeFileName(ASCII)) {
+        qDebug() << "This is not UTF-8 encoding. Current encoding:" << encodeTypeName;
+        encodeFile(encodeTypeName);
+    } else {
+        qDebug() << "Get file codding: " << encodeTypeName;
     }
-
-    cout << "Open source file:" << fileName_.toStdString().c_str() << endl;
-
-    QString line;
-    while (!file.atEnd()) {
-        line = file.readLine();
-        allLines.append(line);
-        cout << line.toStdString().c_str();
-    }
-    cout << endl;
-    file.close();
-
-    EncaAnalyser enca = enca_analyser_alloc("ru");
-    int sizeOfFile = allLines.size();
-    unsigned char *buffStr =(unsigned char *) malloc (sizeOfFile);
-    memset(buffStr, 0, sizeof(sizeOfFile));
-    memcpy(buffStr, allLines.toStdString().c_str(), sizeOfFile);
-    EncaEncoding enc = enca_analyse(enca, buffStr, sizeOfFile);
-
-    qDebug("[%d]=%s", ENCA_NAME_STYLE_HUMAN, enca_charset_name(enc.charset, ENCA_NAME_STYLE_HUMAN));
-    qDebug("[%d]=%s", ENCA_NAME_STYLE_ENCA, enca_charset_name(enc.charset, ENCA_NAME_STYLE_ENCA));
-
-    enca_analyser_free(enca);
-    free(buffStr);
-
-//    QTextCodec *pCodec = QTextCodec::codecForName("utf-8");
-//    QTextCodec::setCodecForCStrings( pCodec);
-
-
-//    QString lineCommon;
-
-
-//    EncaAnalyser enca = enca_analyser_alloc("ru");
-
-//    unsigned char str[lineCommon.size()];
-//    memset(str, 0, sizeof(str));
-//    QString tempStr;
-//    tempStr.append(fileList_.at(0).toStdString().c_str());
-//    tempStr.append(fileList_.at(1).toStdString().c_str());
-//    tempStr.append(fileList_.at(2).toStdString().c_str());
-//    tempStr.append(fileList_.at(3).toStdString().c_str());
-
-//    memcpy(str, tempStr.toStdString().c_str(), tempStr.size());
-
-//    memcpy(str, lineCommon.toStdString().c_str(), lineCommon.size());
-
-//    EncaEncoding enc = enca_analyse(enca, str, sizeof(str));
-
-//    qDebug("[%d]=%s", ENCA_NAME_STYLE_HUMAN, enca_charset_name(enc.charset, ENCA_NAME_STYLE_HUMAN));
-//    enca_analyser_free(enca);
-
-//    pCodec = QTextCodec::codecForName("Windows-1251");
-//    QTextCodec::setCodecForCStrings(pCodec);
-
-//    QString fileNameWrite = fileName_;
-//    fileNameWrite.replace(fileNameWrite.indexOf('.'), 0, "_");
-
-//    QFile fileWrite(fileNameWrite);
-//    if( !fileWrite.open( QIODevice::WriteOnly))
-//    {
-//        cout << "Can'not open file for write" << endl;
-//        return;
-//    }
-
-//    QTextStream in( &fileWrite);
-////    in.setCodec(pCodec);
-
-//    fileList_.push_front("//Current coding windows-1251\n");
-//    QListIterator<QString> i(fileList_);
-//    while (i.hasNext())
-//        in << i.next();
-    //    fileWrite.close();
 }
 
-QString EncodingFile::getEncodingType()
+QString EncodingFile::getLanguageName(Languages language)
+{
+    QString lang;
+    switch (language)
+    {
+        case RUSSIAN: lang = "ru"; break;
+        case ENGLISH: lang = "en"; break;
+        case KOREAN: lang = "ko"; break;
+        case BELARUS: lang = "be"; break;
+        default: break;
+    }
+    return lang;
+}
+
+QString EncodingFile::getCodeFileName(Codings code)
+{
+    QString currCode;
+    switch (code)
+    {
+        case UTF_8: currCode = "UTF-8"; break;
+        case ASCII: currCode = "ASCII"; break;
+        case WINDOWS_1251: currCode = "CP1251"; break;
+        case KOI8_R: currCode = "KOI8-R"; break;
+        default: break;
+    }
+    return currCode;
+}
+
+QString EncodingFile::getEncodingType(Languages language)
 {
     QFile file(fileName_);
-    if (!file.open(QIODevice::ReadWrite)) {
-//        cout << "Error open source file:" << fileName_.toStdString().c_str() << endl;
-//        return;
+    if(!file.open(QIODevice::ReadOnly)) {
+        cout << "[EncodingFile]. Error open source file for reading:" << fileName_.toStdString().c_str() << endl;
     }
 
-    cout << "Open source file:" << fileName_.toStdString().c_str() << endl;
+    cout << "[EncodingFile]. Open source file:" << fileName_.toStdString().c_str() << endl;
 
-    QString line;
+    allLines.clear();
     while (!file.atEnd()) {
-        line = file.readLine();
-        allLines.append(line);
-        cout << line.toStdString().c_str();
+        allLines.append(file.readLine());
     }
-    cout << endl;
     file.close();
 
-    EncaAnalyser enca = enca_analyser_alloc("ru");
+    EncaAnalyser enca = enca_analyser_alloc(getLanguageName(language).toStdString().c_str());
     int sizeOfFile = allLines.size();
     unsigned char *buffStr =(unsigned char *) malloc (sizeOfFile);
     memset(buffStr, 0, sizeof(sizeOfFile));
     memcpy(buffStr, allLines.toStdString().c_str(), sizeOfFile);
     EncaEncoding enc = enca_analyse(enca, buffStr, sizeOfFile);
-    enca_analyser_free(enca);
     free(buffStr);
+    enca_analyser_free(enca);
     QString coding = enca_charset_name(enc.charset, ENCA_NAME_STYLE_ENCA);
     return coding;
+}
+
+void EncodingFile::encodeFile(QString sourceCodeName)
+{
+    QTextCodec *pCodec = QTextCodec::codecForName(sourceCodeName.toStdString().c_str());
+    QTextCodec::setCodecForTr(pCodec);
+    QTextCodec::setCodecForCStrings(pCodec);
+
+    QFile fileWrite(fileName_);
+    if(!fileWrite.open(QIODevice::ReadWrite)) {
+        cout << "[EncodingFile]. Error open source file for writing:" << fileName_.toStdString().c_str() << endl;
+    }
+
+    allLines.clear();
+    while (!fileWrite.atEnd()) {
+        allLines.append(fileWrite.readLine());
+    }
+
+    pCodec = QTextCodec::codecForName(getCodeFileName(UTF_8).toStdString().c_str());
+    QTextCodec::setCodecForTr(pCodec);
+    QTextCodec::setCodecForCStrings(pCodec);
+
+    QString hatFile = tr("// Encoding for ") + getCodeFileName(UTF_8) + "\n";
+    QTextStream out(&fileWrite);
+    out.seek(0);
+    out.setCodec(pCodec);
+    out << hatFile;
+    out << allLines;
+    fileWrite.close();
 }
