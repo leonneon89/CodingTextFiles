@@ -3,6 +3,7 @@
 
 #include "ui_mainwindow.h"
 #include "encodingFile.h"
+#include "directoryWork.h"
 
 class MainWindow : public QMainWindow
 {
@@ -13,10 +14,15 @@ public:
     
 private slots:
     void on_openFile_pushButton_clicked();
+    void on_encodingFiles_pushButton_clicked();
+
+    void on_pushButton_clicked();
 
 private:
     Ui::MainWindow ui;
     EncodingFile* encodingFile;
+    DirectoryWork* directoryWork;
+    QList<QString> listNames;
 };
 
 #endif // MAINWINDOW_H

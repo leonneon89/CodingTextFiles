@@ -31,16 +31,24 @@ public:
     void setFileName(const QString fileName);
     QString getFileName();
     void processFile();
+    void changeEndLines(bool winStyle);
 
 private slots:
     QString getLanguageName(Languages language);
     QString getCodeFileName(Codings code);
     QString getEncodingType(Languages language);
     void encodeFile(QString sourceCodeName);
+    QList<QString> getContentFile(QString absPathName);
+    void setTextCodec(QString codeName);
+    QString getBufferOfContent();
+    void updateContentFile();
+    void encodingFile(QString codeName);
 
 private:
     QString fileName_;
     QString allLines;
+    QList<QString> contentFile;
+    QTextCodec *pCodec;
 };
 
 #endif // ENCODINGFILE_H

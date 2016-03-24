@@ -9,14 +9,19 @@ QT       += core gui
 TARGET = CodingTextFiles
 TEMPLATE = app
 
+INCLUDEPATH +=$$PWD/include/
+INCLUDEPATH +=$$PWD/
 
-SOURCES += main.cpp\
-        mainwindow.cpp \
-        encodingFile.cpp
+SOURCES += $$PWD/main.cpp\
+        $$PWD/mainwindow.cpp \
+        $$PWD/encodingFile.cpp \
+        $$PWD/directoryWork.cpp
 
-HEADERS  += mainwindow.h \
-        encodingFile.h
+HEADERS  += $$PWD/mainwindow.h \
+        $$PWD/encodingFile.h \
+        $$PWD/directoryWork.h
 
-FORMS    += mainwindow.ui
+FORMS    += $$PWD/mainwindow.ui
 
-LIBS += -L/usr/local/lib/ -lenca
+#LIBS += -L/usr/local/lib/ -lenca
+LIBS += -L/$$PWD/lib/ -lenca

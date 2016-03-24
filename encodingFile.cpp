@@ -64,56 +64,99 @@ QString EncodingFile::getCodeFileName(Codings code)
 
 QString EncodingFile::getEncodingType(Languages language)
 {
-    QFile file(fileName_);
-    if(!file.open(QIODevice::ReadOnly)) {
-        cout << "[EncodingFile]. Error open source file for reading:" << fileName_.toStdString().c_str() << endl;
-    }
+    setTextCodec(getCodeFileName(ASCII));
+    updateContentFile();
 
-    cout << "[EncodingFile]. Open source file:" << fileName_.toStdString().c_str() << endl;
-
-    allLines.clear();
-    while (!file.atEnd()) {
-        allLines.append(file.readLine());
-    }
-    file.close();
+    QString buff = getBufferOfContent();
+    int sizeOfBuff = buff.size();
 
     EncaAnalyser enca = enca_analyser_alloc(getLanguageName(language).toStdString().c_str());
-    int sizeOfFile = allLines.size();
-    unsigned char *buffStr =(unsigned char *) malloc (sizeOfFile);
-    memset(buffStr, 0, sizeof(sizeOfFile));
-    memcpy(buffStr, allLines.toStdString().c_str(), sizeOfFile);
-    EncaEncoding enc = enca_analyse(enca, buffStr, sizeOfFile);
+    unsigned char *buffStr =(unsigned char *) malloc (sizeOfBuff);
+    memset(buffStr, 0, sizeof(sizeOfBuff));
+    memcpy(buffStr, buff.toStdString().c_str(), sizeOfBuff);
+    EncaEncoding enc = enca_analyse(enca, buffStr, sizeOfBuff);
     free(buffStr);
     enca_analyser_free(enca);
-    QString coding = enca_charset_name(enc.charset, ENCA_NAME_STYLE_ENCA);
-    return coding;
+    return enca_charset_name(enc.charset, ENCA_NAME_STYLE_ENCA);
 }
 
 void EncodingFile::encodeFile(QString sourceCodeName)
 {
-    QTextCodec *pCodec = QTextCodec::codecForName(sourceCodeName.toStdString().c_str());
+    setTextCodec(sourceCodeName);
+    updateContentFile();
+    encodingFile(getCodeFileName(UTF_8));
+}
+
+QList<QString> EncodingFile::getContentFile(QString absPathName)
+{
+    QList<QString> listString;
+    QFile fileIn(absPathName);
+    if(!fileIn.open(QIODevice::ReadOnly)) {
+        qDebug() << "[EncodingFile]. Error open source file for writing:" << fileName_.toStdString().c_str();
+    }
+    while (!fileIn.atEnd()) {
+        listString.append(fileIn.readLine());
+    }
+    fileIn.close();
+    return listString;
+}
+
+void EncodingFile::changeEndLines(bool winStyle)
+{
+    QMutableListIterator<QString> it(contentFile);
+    QString line;
+    while(it.hasNext()) {
+        line = it.next();
+        if(winStyle) {
+            it.setValue(line.replace("\n", "\r\n"));
+        } else {
+            it.setValue(line.replace("\r\n", "\n"));
+        }
+    }
+}
+
+void EncodingFile::setTextCodec(QString codeName)
+{
+    pCodec = QTextCodec::codecForName(codeName.toStdString().c_str());
     QTextCodec::setCodecForTr(pCodec);
     QTextCodec::setCodecForCStrings(pCodec);
+    QTextCodec::setCodecForLocale(pCodec);
+}
 
-    QFile fileWrite(fileName_);
-    if(!fileWrite.open(QIODevice::ReadWrite)) {
-        cout << "[EncodingFile]. Error open source file for writing:" << fileName_.toStdString().c_str() << endl;
+QString EncodingFile::getBufferOfContent()
+{
+    QString buff;
+    QListIterator<QString> it(contentFile);
+    while(it.hasNext()) {
+        buff.append(it.next());
+    }
+    return buff;
+}
+
+void EncodingFile::updateContentFile()
+{
+    if(!contentFile.isEmpty())
+        contentFile.clear();
+
+    contentFile = getContentFile(fileName_);
+}
+
+void EncodingFile::encodingFile(QString codeName)
+{
+    setTextCodec(codeName);
+
+    QFile fileOut(fileName_);
+    if(!fileOut.open(QIODevice::ReadWrite)) {
+        qDebug() << "[EncodingFile]. Error open source file for writing:" << fileName_.toStdString().c_str();
     }
 
-    allLines.clear();
-    while (!fileWrite.atEnd()) {
-        allLines.append(fileWrite.readLine());
-    }
-
-    pCodec = QTextCodec::codecForName(getCodeFileName(UTF_8).toStdString().c_str());
-    QTextCodec::setCodecForTr(pCodec);
-    QTextCodec::setCodecForCStrings(pCodec);
-
-    QString hatFile = tr("// Encoding for ") + getCodeFileName(UTF_8) + "\n";
-    QTextStream out(&fileWrite);
+    QString hatFile = tr("// Encoding to ") + codeName + "\n";
+    QTextStream out(&fileOut);
     out.seek(0);
     out.setCodec(pCodec);
     out << hatFile;
-    out << allLines;
-    fileWrite.close();
+    foreach(QString line, contentFile) {
+        out << line;
+    }
+    fileOut.close();
 }
