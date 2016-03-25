@@ -11,18 +11,30 @@ class EncodingFile : public QObject
 
     enum Languages
     {
+        BELARUSSIAN,
+        BULGARIAN,
+        CZECH,
+        ESTONIAN,
+        CROATIAN,
+        HUNGARIAN,
+        LITHUANIAN,
+        LATVIAN,
+        POLISH,
         RUSSIAN,
-        ENGLISH,
-        KOREAN,
-        BELARUS
+        SLOVAK,
+        SLOVENE,
+        UKRAINIAN,
+        CHINESE
     };
 
     enum Codings
     {
+        UTF_7,
         UTF_8,
         WINDOWS_1251,
         ASCII,
-        KOI8_R
+        KOI8_R,
+        KOI8_U
     };
 
 public:

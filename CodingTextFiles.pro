@@ -13,15 +13,14 @@ INCLUDEPATH +=$$PWD/include/
 INCLUDEPATH +=$$PWD/
 
 SOURCES += $$PWD/main.cpp\
-        $$PWD/mainwindow.cpp \
-        $$PWD/encodingFile.cpp \
-        $$PWD/directoryWork.cpp
+           $$PWD/mainwindow.cpp \
+           $$PWD/encodingFile.cpp \
+           $$PWD/directoryWork.cpp
 
-HEADERS  += $$PWD/mainwindow.h \
-        $$PWD/encodingFile.h \
-        $$PWD/directoryWork.h
+HEADERS += $$PWD/mainwindow.h \
+           $$PWD/encodingFile.h \
+           $$PWD/directoryWork.h
 
-FORMS    += $$PWD/mainwindow.ui
+FORMS += $$PWD/mainwindow.ui
 
-#LIBS += -L/usr/local/lib/ -lenca
 LIBS += -L/$$PWD/lib/ -lenca

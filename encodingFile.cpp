@@ -39,10 +39,20 @@ QString EncodingFile::getLanguageName(Languages language)
     QString lang;
     switch (language)
     {
+        case BELARUSSIAN: lang = "be"; break;
+        case BULGARIAN: lang = "bu"; break;
+        case CZECH: lang = "cs"; break;
+        case ESTONIAN: lang = "et"; break;
+        case CROATIAN: lang = "hr"; break;
+        case HUNGARIAN: lang = "hu"; break;
+        case LITHUANIAN: lang = "lt"; break;
+        case LATVIAN: lang = "lv"; break;
+        case POLISH: lang = "pl"; break;
         case RUSSIAN: lang = "ru"; break;
-        case ENGLISH: lang = "en"; break;
-        case KOREAN: lang = "ko"; break;
-        case BELARUS: lang = "be"; break;
+        case SLOVAK: lang = "sk"; break;
+        case SLOVENE: lang = "sl"; break;
+        case UKRAINIAN: lang = "uk"; break;
+        case CHINESE: lang = "zn"; break;
         default: break;
     }
     return lang;
@@ -54,9 +64,12 @@ QString EncodingFile::getCodeFileName(Codings code)
     switch (code)
     {
         case UTF_8: currCode = "UTF-8"; break;
+        case UTF_7: currCode = "UTF-7"; break;
         case ASCII: currCode = "ASCII"; break;
-        case WINDOWS_1251: currCode = "CP1251"; break;
         case KOI8_R: currCode = "KOI8-R"; break;
+        case KOI8_U: currCode = "KOI8-U"; break;
+        case WINDOWS_1251: currCode = "CP1251"; break;
+
         default: break;
     }
     return currCode;
