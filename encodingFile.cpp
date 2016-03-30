@@ -27,10 +27,10 @@ void EncodingFile::processFile()
     QString encodeTypeName = getEncodingType(RUSSIAN);
 
     if(encodeTypeName != getCodeFileName(UTF_8) && encodeTypeName != getCodeFileName(ASCII)) {
-        qDebug() << "This is not UTF-8 encoding. Current encoding:" << encodeTypeName;
+        qDebug() << "   [EncodingFile]. Converting file to UTF-8 from:" << encodeTypeName;
         encodeFile(encodeTypeName);
     } else {
-        qDebug() << "Get file codding: " << encodeTypeName;
+//        qDebug() << "     [EncodingFile]. Get file codding: " << encodeTypeName;
     }
 }
 

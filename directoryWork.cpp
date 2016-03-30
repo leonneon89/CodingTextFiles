@@ -12,11 +12,11 @@ DirectoryWork::~DirectoryWork()
 
 void DirectoryWork::setDirectoryPath(const QString path)
 {
-    if(isDirectory(path)) {
+    if(hasDirectory(path)) {
         path_ = path;
-        qDebug() << "[DirectoryPath]. Directory Path:" << path;
+        qDebug() << "[DirectoryPath]. Current directory Path:" << path;
     } else {
-        qDebug() << "[DirectoryPath]. Directory doesn't exist! Path:" << path;
+        qDebug() << "[DirectoryPath]. Selected directory doesn't exist! Path:" << path;
     }
 }
 
@@ -25,7 +25,7 @@ QString DirectoryWork::getDirectoryPath()
     return path_;
 }
 
-bool DirectoryWork::isDirectory(const QString path)
+bool DirectoryWork::hasDirectory(const QString path)
 {
     QDir dir(path);
     return dir.exists();
@@ -49,7 +49,7 @@ void DirectoryWork::processDirectory()
 
     QString strPath;
     foreach (strPath, listNames) {
-       qDebug() << strPath;
+        qDebug() << "[DirectoryWork]. " << strPath;
     }
 }
 

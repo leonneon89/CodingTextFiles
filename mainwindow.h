@@ -14,9 +14,10 @@ public:
     
 private slots:
     void on_openFile_pushButton_clicked();
-    void on_encodingFiles_pushButton_clicked();
-
     void on_pushButton_clicked();
+    void on_encodingTextFile_pushButton_clicked();
+    void on_encodingDirectory_pushButton_clicked();
+    void on_openDirectory_pushButton_clicked();
 
 private:
     Ui::MainWindow ui;

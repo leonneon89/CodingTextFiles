@@ -15,7 +15,7 @@ public:
 
     void setDirectoryPath(const QString path);
     QString getDirectoryPath();
-    bool isDirectory(const QString path);
+    bool hasDirectory(const QString path);
     void processDirectory();
     QList<QString> &getListNames();
 
