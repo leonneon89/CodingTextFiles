@@ -5,6 +5,7 @@
 #include <QFile>
 #include <enca.h>
 
+
 class EncodingFile : public QObject
 {
     Q_OBJECT
@@ -45,6 +46,7 @@ public:
     void processFile();
     void changeEndLines(bool winStyle);
 
+
 private slots:
     QString getLanguageName(Languages language);
     QString getCodeFileName(Codings code);
@@ -60,7 +62,7 @@ private:
     QString fileName_;
     QString allLines;
     QList<QString> contentFile;
-    QTextCodec *pCodec;
+    QTextCodec *pCodec;        
 };
 
 #endif // ENCODINGFILE_H

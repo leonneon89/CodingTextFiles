@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QDir>
 #include <QDirIterator>
+#include "fileType.h"
 
 class DirectoryWork : public QObject
 {
@@ -18,8 +19,10 @@ public:
     bool hasDirectory(const QString path);
     void processDirectory();
     QList<QString> &getListNames();
+    void setStringTypes(QString stringTypes);
 
 private:
+    FileType* fileTypes;
     QString path_;
     QList<QString> listNames;
 };

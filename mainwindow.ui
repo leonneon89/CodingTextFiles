@@ -20,7 +20,7 @@
       <x>10</x>
       <y>10</y>
       <width>561</width>
-      <height>191</height>
+      <height>201</height>
      </rect>
     </property>
     <property name="title">
@@ -80,16 +80,6 @@
          </property>
         </widget>
        </item>
-       <item row="5" column="1" colspan="2">
-        <widget class="QPushButton" name="pushButton">
-         <property name="enabled">
-          <bool>false</bool>
-         </property>
-         <property name="text">
-          <string>Применить</string>
-         </property>
-        </widget>
-       </item>
        <item row="2" column="1" colspan="2">
         <widget class="QPushButton" name="openDirectory_pushButton">
          <property name="text">
@@ -122,6 +112,33 @@
         <widget class="QPushButton" name="encodingDirectory_pushButton">
          <property name="text">
           <string>Конвертировать директорию</string>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="0">
+        <widget class="QLabel" name="label_4">
+         <property name="text">
+          <string>Типы файлов</string>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="1" colspan="2">
+        <widget class="QLineEdit" name="fileTypes_lineEdit"/>
+       </item>
+       <item row="6" column="3">
+        <widget class="QPushButton" name="inputFileTypes_pushButton">
+         <property name="text">
+          <string>Задать</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="3">
+        <widget class="QPushButton" name="pushButton">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <property name="text">
+          <string>Применить</string>
          </property>
         </widget>
        </item>

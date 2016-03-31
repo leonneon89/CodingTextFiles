@@ -15,11 +15,13 @@ INCLUDEPATH +=$$PWD/
 SOURCES += $$PWD/main.cpp\
            $$PWD/mainwindow.cpp \
            $$PWD/encodingFile.cpp \
-           $$PWD/directoryWork.cpp
+           $$PWD/directoryWork.cpp \
+    fileType.cpp
 
 HEADERS += $$PWD/mainwindow.h \
            $$PWD/encodingFile.h \
-           $$PWD/directoryWork.h
+           $$PWD/directoryWork.h \
+    fileType.h
 
 FORMS += $$PWD/mainwindow.ui
 

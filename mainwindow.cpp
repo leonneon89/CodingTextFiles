@@ -8,6 +8,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui.setupUi(this);
     encodingFile = new EncodingFile;
     directoryWork = new DirectoryWork;
+    fileTypes = new FileType;
 }
 
 void MainWindow::on_openFile_pushButton_clicked()
@@ -54,4 +55,9 @@ void MainWindow::on_openDirectory_pushButton_clicked()
 {
     QString path = QFileDialog::getExistingDirectory(this, "Select a Directory", "/opt", QFileDialog::ShowDirsOnly);
     directoryWork->setDirectoryPath(path);
+}
+
+void MainWindow::on_inputFileTypes_pushButton_clicked()
+{
+    directoryWork->setStringTypes(ui.fileTypes_lineEdit->text());
 }

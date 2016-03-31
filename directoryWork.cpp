@@ -4,6 +4,7 @@
 DirectoryWork::DirectoryWork(QObject *parent):
     QObject(parent)
 {
+    fileTypes = new FileType;
 }
 
 DirectoryWork::~DirectoryWork()
@@ -35,15 +36,21 @@ void DirectoryWork::processDirectory()
 {
     listNames.clear();
     QDirIterator iterator(path_, QDir::Files | QDir::NoSymLinks, QDirIterator::Subdirectories);
+
+    QStringList fileType = fileTypes->getFileTypes();
+
     while(iterator.hasNext())
     {
        iterator.next();
        QString str = iterator.fileInfo().absoluteFilePath();
        QString strName = iterator.fileInfo().baseName();
 
-       if(str.endsWith(".cpp") || str.endsWith(".h") || str.endsWith(".hpp")) {
-           if(!strName.startsWith("moc_") && !strName.startsWith("ui_"))
-               listNames.append(str);
+       foreach (QString type, fileType) {
+           if(str.endsWith(type)) {
+               if(!strName.startsWith("moc_") && !strName.startsWith("ui_")) {
+                   listNames.append(str);
+               }
+           }
        }
     }
 
@@ -56,4 +63,9 @@ void DirectoryWork::processDirectory()
 QList<QString> &DirectoryWork::getListNames()
 {
     return listNames;
+}
+
+void DirectoryWork::setStringTypes(QString stringTypes)
+{
+    fileTypes->setFileTypes(stringTypes);
 }
