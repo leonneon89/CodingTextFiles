@@ -10,4 +10,5 @@ debug/ui_*
 release/*.o
 release/moc*
 release/ui_*
-
+CodingTextFiles
+CodingTextFiles.pro.*
